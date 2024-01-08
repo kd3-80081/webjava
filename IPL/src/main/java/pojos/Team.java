@@ -1,0 +1,147 @@
+package pojos;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.*;
+
+
+
+//id , name, abbreviation,owner,max_age,batting_avg,wickets_taken
+//one , parent, inverse
+@Entity
+@Table(name = "teams")
+public class Team extends BaseEntity {
+	@Column(length = 100)
+	private String name;
+	@Column(length = 10)
+	private String abbreviation;
+	
+	@OneToOne
+	@MapsId
+	@JoinColumn(name = "owner_id", nullable = false)
+	private Owner teamOwner;
+	
+	@Column(name = "max_age")
+	private int maxAge;// max age of the player allowed in this team
+	@Column(name = "batting_avg")
+	private double battingAvg;
+	@Column(name = "wickets_taken")
+	private int wicketsTaken;
+	@OneToMany(mappedBy = "myTeam",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Player> player = new ArrayList<>();
+
+	public Team() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public Team(Integer id, String abbreviation) {
+		this.setId(id);
+		this.abbreviation=abbreviation;
+		
+	}
+	
+	
+	
+	
+	
+
+	public Team(String name, String abbreviation, int maxAge, double battingAvg, int wicketsTaken) {
+		super();
+		this.name = name;
+		this.abbreviation = abbreviation;
+		this.maxAge = maxAge;
+		this.battingAvg = battingAvg;
+		this.wicketsTaken = wicketsTaken;
+	}
+	
+
+	public Team(String name, String abbreviation, Owner teamOwner, int maxAge, double battingAvg, int wicketsTaken) {
+
+		this.name = name;
+		this.abbreviation = abbreviation;
+		this.teamOwner = teamOwner;
+		this.maxAge = maxAge;
+		this.battingAvg = battingAvg;
+		this.wicketsTaken = wicketsTaken;
+	}
+
+	public List<Player> getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(List<Player> player) {
+		this.player = player;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	
+
+	public Owner getTeamOwner() {
+		return teamOwner;
+	}
+
+	public void setTeamOwner(Owner teamOwner) {
+		this.teamOwner = teamOwner;
+	}
+
+	public int getMaxAge() {
+		return maxAge;
+	}
+
+	public void setMaxAge(int maxAge) {
+		this.maxAge = maxAge;
+	}
+
+	public double getBattingAvg() {
+		return battingAvg;
+	}
+
+	public void setBattingAvg(double battingAvg) {
+		this.battingAvg = battingAvg;
+	}
+
+	public int getWicketsTaken() {
+		return wicketsTaken;
+	}
+
+	public void setWicketsTaken(int wicketsTaken) {
+		this.wicketsTaken = wicketsTaken;
+	}
+
+	public String getAbbreviation() {
+		return abbreviation;
+	}
+
+	public void setAbbreviation(String abbreviation) {
+		this.abbreviation = abbreviation;
+	}
+
+	public void addPlayer(Player plyr) {
+		player.add(plyr);
+		plyr.setMyTeam(this);
+	}
+	
+	public void removePlayer(Player plyr) {
+		player.remove(plyr);
+		plyr.setMyTeam(null);
+	}
+
+	@Override
+	public String toString() {
+		return "Team [name=" + name + ", abbreviation=" + abbreviation + ", maxAge=" + maxAge + ", battingAvg="
+				+ battingAvg + ", wicketsTaken=" + wicketsTaken + "]";
+	}
+
+	
+
+}
